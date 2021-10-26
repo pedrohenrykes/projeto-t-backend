@@ -1,16 +1,21 @@
-import uuid from 'uuid/v4'
-import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
-import EmployeeCategory from './EmployeeCategory'
-import User from './User'
+import { DateTime } from 'luxon';
+import { BaseModel, beforeCreate, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm';
+import EmployeeCategory from './EmployeeCategory';
+import User from './User';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class Employee extends BaseModel {
+
+  public static table = 'employees';
+
   @column({ isPrimary: true })
   public id: number
 
+  @column()
+  public registry: string
   @beforeCreate()
   public static assignUuid(employee: Employee) {
-    employee.registry = uuid()
+    employee.registry = uuidv4()
   }
 
   @column()
@@ -29,19 +34,25 @@ export default class Employee extends BaseModel {
   public rg: string
 
   @column()
-  public sspId: number
+  public ssp: string
 
-  @belongsTo(() => EmployeeCategory)
-  public employeeCategoryId: BelongsTo<typeof EmployeeCategory>
+  @column()
+  public employeeCategoryId: number
+  @belongsTo(() => EmployeeCategory, { foreignKey: 'employeeCategoryId' })
+  public employeeCategory: BelongsTo<typeof EmployeeCategory>
 
-  @belongsTo(() => User)
-  public createdBy: BelongsTo<typeof User>
+  @column()
+  public createdBy: number
+  @belongsTo(() => User, { foreignKey: 'createdBy' })
+  public creator: BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
-  @belongsTo(() => User)
-  public updatedBy: BelongsTo<typeof User>
+  @column()
+  public updatedBy: number
+  @belongsTo(() => User, { foreignKey: 'updatedBy' })
+  public updater: BelongsTo<typeof User>
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
