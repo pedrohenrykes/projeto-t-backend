@@ -1,30 +1,36 @@
 export default class AuditoryFields {
-  private generateFields(table, field){
-    const _field = `${field}_by`;
+  private generateFields(table, field, isNullable){
+    const fieldBy = `${field}_by`;
+    const fieldAt = `${field}_at`;
 
-    table.integer(_field);
-    table.timestamp(`${field}_at`);
+    if (isNullable) {
+      table.integer(fieldBy).nullable();
+      table.timestamp(fieldAt).nullable();
+    } else {
+      table.integer(fieldBy).notNullable();
+      table.timestamp(fieldAt).notNullable();
+    }
   }
 
-  private created(table){
-    this.generateFields(table, 'created');
+  private created(table, isNullable){
+    this.generateFields(table, 'created', isNullable);
   }
 
-  private updated(table){
-    this.generateFields(table, 'updated');
+  private updated(table, isNullable){
+    this.generateFields(table, 'updated', isNullable);
   }
 
-  private deleted(table){
-    this.generateFields(table, 'deleted');
+  private deleted(table, isNullable){
+    this.generateFields(table, 'deleted', isNullable);
   }
 
-  public basics(table){
-    this.created(table);
-    this.updated(table);
+  public basics(table, isNullable){
+    this.created(table, isNullable);
+    this.updated(table, isNullable);
   }
 
-  public all(table){
-    this.basics(table);
-    this.deleted(table);
+  public all(table, isNullable){
+    this.basics(table, isNullable);
+    this.deleted(table, isNullable);
   }
 }

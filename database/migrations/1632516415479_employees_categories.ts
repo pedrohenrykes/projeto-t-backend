@@ -12,7 +12,7 @@ export default class EmployeesCategories extends BaseSchema {
       table.increments('id')
       table.string('name')
 
-      auditoryFields.basics(table)
+      auditoryFields.basics(table, true)
     })
   }
 

@@ -12,18 +12,18 @@ export default class Employees extends BaseSchema {
       const auditoryFields = new AuditoryFields
 
       table.increments('id')
-      table.uuid('registry').unique()
+      table.uuid('registry').notNullable().unique()
       table.string('name')
       table.date('birth')
       table.string('ctps').unique()
       table.string('cpf').unique()
       table.string('rg')
-      table.integer('ssp_id')
+      table.string('ssp', 2)
       table.integer('employee_category_id')
 
-      table.unique(['rg', 'ssp_id'])
+      table.unique(['rg', 'ssp'])
 
-      auditoryFields.basics(table)
+      auditoryFields.basics(table, true)
       foreignFields.foreign(table, 'employee_category_id', 'id', 'employees_categories')
     })
   }
