@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 
 export const EmployeeFactory = Factory.define(Employee, ({ faker }) => {
 
-    const birth = new Date(faker.date.past()).toISOString();
+    const birth = new Date(faker.date.past(30, '2003-01-01')).toISOString();
 
     return {
         name: `${faker.name.firstName()} ${faker.name.lastName()}`,
